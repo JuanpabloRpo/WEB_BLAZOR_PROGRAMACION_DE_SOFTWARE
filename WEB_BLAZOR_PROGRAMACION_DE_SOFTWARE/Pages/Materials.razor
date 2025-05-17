@@ -1,0 +1,65 @@
+﻿@page "/Materials"
+@using WEB_BLAZOR_PROGRAMACION_DE_SOFTWARE.Entities
+@using WEB_BLAZOR_PROGRAMACION_DE_SOFTWARE.Enumerations
+@using WEB_BLAZOR_PROGRAMACION_DE_SOFTWARE.Services
+@using WEB_BLAZOR_PROGRAMACION_DE_SOFTWARE.Interfaces
+@inject IMaterialService MaterialService
+
+
+<h3>listar Materias</h3>
+
+@if (materias == null)
+{
+    <p><em>No se pudo acceder a la base de datos</em></p>
+}
+else if (materias.Count == 0)
+{
+    <p><em>No hay materias disponibles.</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>MaterialId</th>
+                <th>Title</th>
+                <th>Author</th>
+                <th>PublicationYear</th>
+                <th>Status</th>
+                <th>Condition</th>
+                <th>Topic</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var materia in materias)
+            {
+                <tr>
+                    <td>@materia.MaterialId</td>
+                    <td>@materia.Title</td>
+                    <td>@materia.Author</td>
+                    <td>@materia.PublicationYear</td>
+                    <td>@materia.Status.ToString()</td>
+                    <td>@materia.Condition.ToString()</td>
+                    <td>@materia.Topic.ToString()</td>
+                    <td>
+                        <NavLink class="btn btn-success" href="@($"/RealizarReserva/{materia.MaterialId}")">
+                            Reservar
+                        </NavLink>
+
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+
+@code {
+    private List<Material> materias;
+
+    protected override async Task OnInitializedAsync()
+    {
+        materias = await MaterialService.ListMaterials();
+    }
+
+}

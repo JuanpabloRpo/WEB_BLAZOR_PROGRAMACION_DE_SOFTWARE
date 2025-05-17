@@ -1,0 +1,10 @@
+﻿@page "/RealizarReserva/{materialId:int}"
+@using WEB_BLAZOR_PROGRAMACION_DE_SOFTWARE.Services
+
+<h3>Reserva del material</h3>
+<p>Material ID: @materialId</p>
+
+@code {
+    [Parameter]
+    public int materialId { get; set; }
+}

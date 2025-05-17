@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36109.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WEB_BLAZOR_PROGRAMACION_DE_SOFTWARE", "WEB_BLAZOR_PROGRAMACION_DE_SOFTWARE\WEB_BLAZOR_PROGRAMACION_DE_SOFTWARE.csproj", "{5A37E74F-8A3B-4FF1-B5FA-890E1797E23E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5A37E74F-8A3B-4FF1-B5FA-890E1797E23E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5A37E74F-8A3B-4FF1-B5FA-890E1797E23E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5A37E74F-8A3B-4FF1-B5FA-890E1797E23E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5A37E74F-8A3B-4FF1-B5FA-890E1797E23E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C6520A68-6557-40CD-BE25-76A6C2162400}
+	EndGlobalSection
+EndGlobal

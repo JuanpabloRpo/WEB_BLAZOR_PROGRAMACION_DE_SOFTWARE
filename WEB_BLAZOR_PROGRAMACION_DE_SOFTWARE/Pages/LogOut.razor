@@ -1,0 +1,11 @@
+﻿@page "/LogOut"
+@inject UserSessionService session
+<h3>@session.user.FirstName  @session.user.LastName</h3>
+<h3>Hata luego</h3>
+<input class="btn btn-success" type="button" value="Salir" @onclick="logout" />
+@code {
+    public void logout()
+    {
+        session.CerrarSesion();
+    }
+}

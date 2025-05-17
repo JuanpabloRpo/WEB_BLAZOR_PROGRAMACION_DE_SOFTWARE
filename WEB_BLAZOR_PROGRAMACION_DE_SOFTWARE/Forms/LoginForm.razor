@@ -1,0 +1,31 @@
+﻿@using WEB_BLAZOR_PROGRAMACION_DE_SOFTWARE.Interfaces
+@using WEB_BLAZOR_PROGRAMACION_DE_SOFTWARE.Services
+@inject UserSessionService session
+@inject NavigationManager Navigation
+@inject ILoginService loginUser
+
+<h3>LoginForm</h3>
+<p>Ingrese usuario y Password</p>
+<br />
+<input type="text" @bind-value="usuario" />
+<div></div>
+<input type="text" @bind-value="password" />
+<div></div>
+<input class="btn btn-success" type="button" value="iniciar" @onclick="Login" />
+<div></div>
+
+@code {
+    string usuario;
+    string password;
+
+    public async Task Login()
+    {
+        var user = await loginUser.check(usuario, password);
+        if (user != null)
+        {
+            session.IniciarSesion(user);
+            Navigation.NavigateTo("/");
+        }
+        
+    }
+}

@@ -1,0 +1,19 @@
+﻿@page "/"
+@using WEB_BLAZOR_PROGRAMACION_DE_SOFTWARE.Services
+@inject UserSessionService session
+
+<PageTitle>Home Principal</PageTitle>
+
+
+@if (session.user.Id !=0 )
+{
+    <h1>Bienvenido @session.user.FirstName @session.user.LastName @session.user.MiddleName a la Libreria</h1>
+    <h2>Esperamos que puesdas encontrar todos tus libros y puedas disfrutar de este mundo de la literatura</h2>
+}
+else
+{
+    <h1>Bienvenido a la libreria de la universidad</h1>
+
+    <h3>Aqui podras encontrar diversos libros y podras reservarlos para que te los prestemos</h3>
+}
+

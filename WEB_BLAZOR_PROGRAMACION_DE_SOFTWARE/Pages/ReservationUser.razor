@@ -1,8 +1,67 @@
 ﻿@page "/ReservationUser"
+@using WEB_BLAZOR_PROGRAMACION_DE_SOFTWARE.Entities
+@using WEB_BLAZOR_PROGRAMACION_DE_SOFTWARE.Services
+@using WEB_BLAZOR_PROGRAMACION_DE_SOFTWARE.Interfaces
+@inject IReservationService reservation
+@inject UserSessionService session
 
-<h1>Reservar material</h1>
+<h2>Las reservas que has hecho son: </h2>
+@if (reservas == null)
+{
+    <p><em>No se pudo acceder a la base de datos</em></p>
+}
+else if (reservas.Count == 0)
+{
+    <p><em>No hay materias disponibles.</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ReservationId</th>
+                <th>Usuario</th>
+                <th>material</th>
+                <th>RequestDate </th>
+                <th>ExpirationDate</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var reserva in reservas)
+            {
+                <tr>
+                    <td>@reserva.ReservationId</td>
+                    <td>@session.user.FirstName @session.user.LastName</td>
+                    <td>@reserva.MaterialId</td>
+                    <td>@reserva.RequestDate.ToString()</td>
+                    <td>@reserva.ExpirationDate.ToString()</td>
+                    <td>@reserva.Status.ToString()</td>
+                    @if (reserva.Status.ToString().Equals("Pending"))
+                    {
+                        <td>
+                            <input class="btn btn-success" type="button" value="Calcelar reserva" @onclick="cancelar" />
+                        </td>
+                        
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+}
 
 
 @code {
-    
+    private List<Reservation> reservas;
+
+    protected override async Task OnInitializedAsync()
+    {
+        reservas = await reservation.GetReservationsUser(session.user.Id);
+    }
+    protected void cancelar()
+    {
+        
+    }
+
 }
+

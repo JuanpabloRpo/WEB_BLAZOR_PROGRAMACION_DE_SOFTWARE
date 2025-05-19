@@ -38,44 +38,57 @@ namespace API_PROGRAMACION_DE_SOFTWARE.Services
                 return null;
             }
             
-        }
+        }*/
 
         public async Task<List<Reservation>> GetReservationsUser(int UserId)
         {
-            var result = await _reservationDAO.SearchReservationsUser(UserId);
-            if (result != null)
-            {
-                _logger.LogInformation($"Se encontraron las reservas del usuario con ID: {UserId}");
-                return result;
-            }
-            else
-            {
-                _logger.LogWarning($"No se encontró reservas para el usuario con ID: {UserId}.");
-                return null;
-            }
-        }*/
-
-        public async Task<Boolean> CreateReservation(int materialId, int userId)
-        {
-
-            Console.WriteLine("MaterialService.ListMaterials() llamado.");
+            Console.WriteLine("ReservationService.GetReservationsUser() llamado.");
+            Console.WriteLine("userId = "+UserId);
             try
             {
 
-                var response = await _httpClient.GetAsync($"{_baseApiUrl}/Listar");
-                Console.WriteLine($"Respuesta de ListMaterials: Status Code - {response.StatusCode}");
+                var response = await _httpClient.GetAsync($"{_baseApiUrl}/ReservacionesUsuario?userId={UserId}");
+                Console.WriteLine($"Respuesta de GetReservationsUser: Status Code - {response.StatusCode}");
 
                 if (response.IsSuccessStatusCode)
                 {
                     var content = await response.Content.ReadAsStringAsync();
                     var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-                    var materias = JsonSerializer.Deserialize<List<Material>>(content, options);
-                    Console.WriteLine($"Materias listadas exitosamente: {materias?.Count ?? 0} encontradas.");
+                    var reservas = JsonSerializer.Deserialize<List<Reservation>>(content, options);
+                    Console.WriteLine($"Reservas listadas exitosamente: {reservas?.Count ?? 0} encontradas.");
+                    return reservas;
+                }
+                else
+                {
+                    Console.WriteLine($"Error al listar las reservas: Status Code - {response.StatusCode}");
+                    return null; // O lanza una excepción más específica
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error al listar las reservas: {ex.Message}");
+                return null; // O lanza una excepción más específica
+            }
+        }
+        
+
+        public async Task<Boolean> CreateReservation(int materialId, int userId)
+        {
+
+            Console.WriteLine("ReservationService.CreateReservation() llamado.");
+            try
+            {
+
+                var response = await _httpClient.PostAsync($"{_baseApiUrl}/Crear?materialId={materialId}&userId={userId}",null);
+                Console.WriteLine($"Respuesta de CreateReservation: Status Code - {response.StatusCode}");
+
+                if (response.IsSuccessStatusCode)
+                {
                     return true;
                 }
                 else
                 {
-                    Console.WriteLine($"Error al listar materias: Status Code - {response.StatusCode}");
+                    Console.WriteLine($"Error al crear la reserva materias: Status Code - {response.StatusCode}");
                     return false; // O lanza una excepción más específica
                 }
             }

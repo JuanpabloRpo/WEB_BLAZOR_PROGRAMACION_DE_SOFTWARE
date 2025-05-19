@@ -1,7 +1,68 @@
 ﻿@page "/LoanUser"
+@using WEB_BLAZOR_PROGRAMACION_DE_SOFTWARE.Entities
+@using WEB_BLAZOR_PROGRAMACION_DE_SOFTWARE.Services
+@using WEB_BLAZOR_PROGRAMACION_DE_SOFTWARE.Interfaces
+@inject ILoanService loan
+@inject UserSessionService session
 
-<h3>Loan</h3>
+<h2>Los prestamos que has hecho son: </h2>
+@if (loans == null)
+{
+    <p><em>No se pudo acceder a la base de datos</em></p>
+}
+else if (loans.Count == 0)
+{
+    <p><em>No hay materias disponibles.</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>LoanId</th>
+                <th>Usuario</th>
+                <th>material</th>
+                <th>RequestDate </th>
+                <th>ExpirationDate</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var loan in loans)
+            {
+                <tr>
+                    <td>@loan.LoanId</td>
+                    <td>@session.user.FirstName @session.user.LastName</td>
+                    <td>@loan.ReservationId</td>
+                    <td>@loan.StartDate.ToString()</td>
+                    <td>@loan.DueDate.ToString()</td>
+                    <td>@loan.ReturnDate.ToString()</td>
+                    <td>@loan.Status.ToString()</td>
+
+                    @if (loan.Status.ToString().Equals("Active"))
+                    {
+                        <td>
+                            <input class="btn btn-success" type="button" value="Terminar prestamo" @onclick="Terminar" />
+                        </td>
+                        
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
 
 @code {
+    private List<Loan> loans;
+
+    protected override async Task OnInitializedAsync()
+    {
+        loans = await loan.GetLoansUser(session.user.Id);
+    }
+    protected void Terminar()
+    {
+
+    }
 
 }

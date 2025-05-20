@@ -46,13 +46,38 @@ namespace API_PROGRAMACION_DE_SOFTWARE.Services
                 return null; // O lanza una excepción más específica
             }
         }
-/*
+
         public async Task<List<Material>> ListAvailableMaterials()
         {
-            var materials = await _materialDAO.ListAvailableMaterials();
-            return materials.IsNullOrEmpty() != true ? materials : null;
-        }
+            Console.WriteLine("MaterialService.ListMaterials() llamado.");
+            try
+            {
 
+                var response = await _httpClient.GetAsync($"{_baseApiUrl}/MaterialesDisponibles");
+                Console.WriteLine($"Respuesta de ListAvailableMaterials: Status Code - {response.StatusCode}");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var content = await response.Content.ReadAsStringAsync();
+                    var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+                    var materias = JsonSerializer.Deserialize<List<Material>>(content, options);
+                    Console.WriteLine($"Materias listadas exitosamente: {materias?.Count ?? 0} encontradas.");
+                    return materias;
+                }
+                else
+                {
+                    Console.WriteLine($"Error al listar materias: Status Code - {response.StatusCode}");
+                    return null; // O lanza una excepción más específica
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error al listar materias: {ex.Message}");
+                return null; // O lanza una excepción más específica
+            }
+        }
+    
+        /*
         public async Task<Material> GetMaterial(int materialId)
         {
             

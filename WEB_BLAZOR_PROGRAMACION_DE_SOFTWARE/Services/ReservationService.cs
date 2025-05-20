@@ -1,6 +1,8 @@
-﻿using System.Text.Json;
+﻿using System.Resources;
+using System.Text.Json;
 using WEB_BLAZOR_PROGRAMACION_DE_SOFTWARE.Entities;
 using WEB_BLAZOR_PROGRAMACION_DE_SOFTWARE.Interfaces;
+using WEB_BLAZOR_PROGRAMACION_DE_SOFTWARE.Pages;
 
 
 namespace API_PROGRAMACION_DE_SOFTWARE.Services
@@ -162,38 +164,34 @@ namespace API_PROGRAMACION_DE_SOFTWARE.Services
                 _logger.LogError($"Error al cancelar la reserva con ID: {reservation.ReservationId}.");
                 return false;
             }
-        }
+        }*/
 
         public async Task<Boolean> CancelReservation(int reservationId, int userId)
         {
-            var reservation = await _reservationDAO.GetReservation(reservationId);
-            if (reservation == null)
+            Console.WriteLine("ReservationService.CreateReservation() llamado.");
+            try
             {
-                _logger.LogError($"No se encontró la reserva con ID: {reservationId}.");
-                return false;
-            }
 
-            if (reservation.UserId != userId)
-            {
-                _logger.LogError($"La reserva con ID: {reservationId} no pertenece al usuario con ID: {userId}.");
-                return false;
-            }
-            reservation.Status = ReservationStatus.Canceled;
-            var resultado = await _reservationDAO.UpdateReservationStatus(reservation.ReservationId, (int)reservation.Status);
-            var materialResult = await _materialDAO.UpdateMaterialStatus(reservation.MaterialId, 0);
+                var response = await _httpClient.PutAsync($"{_baseApiUrl}/Cancelar?reservationId={reservationId}&userId={userId}", null);
+                Console.WriteLine($"Respuesta de CreateReservation: Status Code - {response.StatusCode}");
 
-            if (resultado)
-            {
-                _logger.LogInformation("Reserva cancelada de manera exitosa.");
-                return true;
+                if (response.IsSuccessStatusCode)
+                {
+                    return true;
+                }
+                else
+                {
+                    Console.WriteLine($"Error al crear la reserva materias: Status Code - {response.StatusCode}");
+                    return false; // O lanza una excepción más específica
+                }
             }
-            else
+            catch (Exception ex)
             {
-                _logger.LogError($"Error al cancelar la reserva con ID: {reservation.ReservationId}.");
-                return false;
+                Console.WriteLine($"Error al listar materias: {ex.Message}");
+                return false; // O lanza una excepción más específica
             }
         }
-
+        /*
         public async Task<Boolean> DeleteReservation(int reservationId)
         {
             

@@ -6,9 +6,8 @@
 @inject IMaterialService MaterialService
 
 
-<h3>listar Materias</h3>
 
-@if (materias == null)
+@if (materias == null || materiasAvailable == null)
 {
     <p><em>No se pudo acceder a la base de datos</em></p>
 }
@@ -18,48 +17,113 @@ else if (materias.Count == 0)
 }
 else
 {
-    <table class="table">
-        <thead>
-            <tr>
-                <th>MaterialId</th>
-                <th>Title</th>
-                <th>Author</th>
-                <th>PublicationYear</th>
-                <th>Status</th>
-                <th>Condition</th>
-                <th>Topic</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var materia in materias)
-            {
+    <h3>listar Materias</h3>
+    <button class="btn btn-primary m-2" @onclick="ViewAllMaterials">Materiales</button>
+    <button class="btn btn-secondary m-2" @onclick="ViewAvailableMaterials">Materiales Disponibles</button>
+    @if (tablaMostrada.Equals("All"))
+    {
+        <table class="table">
+            <thead>
                 <tr>
-                    <td>@materia.MaterialId</td>
-                    <td>@materia.Title</td>
-                    <td>@materia.Author</td>
-                    <td>@materia.PublicationYear</td>
-                    <td>@materia.Status.ToString()</td>
-                    <td>@materia.Condition.ToString()</td>
-                    <td>@materia.Topic.ToString()</td>
-                    <td>
-                        <NavLink class="btn btn-success" href="@($"/RealizarReserva/{materia.MaterialId}")">
-                            Reservar
-                        </NavLink>
-
-                    </td>
+                    <th>MaterialId</th>
+                    <th>Title</th>
+                    <th>Author</th>
+                    <th>PublicationYear</th>
+                    <th>Status</th>
+                    <th>Condition</th>
+                    <th>Topic</th>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach (var materia in materias)
+                {
+                    <tr>
+                        <td>@materia.MaterialId</td>
+                        <td>@materia.Title</td>
+                        <td>@materia.Author</td>
+                        <td>@materia.PublicationYear</td>
+                        <td>@materia.Status.ToString()</td>
+                        <td>@materia.Condition.ToString()</td>
+                        <td>@materia.Topic.ToString()</td>
+                        @if (@materia.Status.ToString().Equals("Available"))
+                        {
+                            <td>
+                                <NavLink class="btn btn-success" href="@($"/RealizarReserva/{materia.MaterialId}")">
+                                    Reservar
+                                </NavLink>
+
+                            </td>
+                        }
+
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>MaterialId</th>
+                    <th>Title</th>
+                    <th>Author</th>
+                    <th>PublicationYear</th>
+                    <th>Status</th>
+                    <th>Condition</th>
+                    <th>Topic</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var materia in materiasAvailable)
+                {
+                    <tr>
+                        <td>@materia.MaterialId</td>
+                        <td>@materia.Title</td>
+                        <td>@materia.Author</td>
+                        <td>@materia.PublicationYear</td>
+                        <td>@materia.Status.ToString()</td>
+                        <td>@materia.Condition.ToString()</td>
+                        <td>@materia.Topic.ToString()</td>
+                        <td>
+                            <NavLink class="btn btn-success" href="@($"/RealizarReserva/{materia.MaterialId}")">
+                                Reservar
+                            </NavLink>
+
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    
 }
+
+
 
 
 @code {
     private List<Material> materias;
+    private List<Material> materiasAvailable;
+
+    private string tablaMostrada = "All";
 
     protected override async Task OnInitializedAsync()
     {
         materias = await MaterialService.ListMaterials();
+        materiasAvailable = await MaterialService.ListAvailableMaterials();
+    }
+
+    protected void ViewAvailableMaterials()
+    {
+        tablaMostrada = "Available";
+        StateHasChanged();
+    }
+
+    protected void ViewAllMaterials()
+    {
+        tablaMostrada = "All";
+        StateHasChanged();
     }
 
 }

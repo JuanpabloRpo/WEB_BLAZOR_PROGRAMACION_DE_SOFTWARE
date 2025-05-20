@@ -40,7 +40,10 @@ else
                     @if (reserva.Status.ToString().Equals("Pending"))
                     {
                         <td>
-                            <input class="btn btn-success" type="button" value="Calcelar reserva" @onclick="cancelar" />
+                            <NavLink class="btn btn-success" href="@($"/CancelarReserva/{reserva.ReservationId}")">
+                                Reservar
+                            </NavLink>
+
                         </td>
                         
                     }
@@ -50,17 +53,12 @@ else
     </table>
 }
 
-
 @code {
     private List<Reservation> reservas;
 
     protected override async Task OnInitializedAsync()
     {
         reservas = await reservation.GetReservationsUser(session.user.Id);
-    }
-    protected void cancelar()
-    {
-        
     }
 
 }

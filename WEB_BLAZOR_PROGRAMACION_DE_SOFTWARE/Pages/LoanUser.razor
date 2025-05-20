@@ -21,9 +21,10 @@ else
             <tr>
                 <th>LoanId</th>
                 <th>Usuario</th>
-                <th>material</th>
+                <th>ReservationId</th>
                 <th>RequestDate </th>
                 <th>ExpirationDate</th>
+                <th>ReturnDate</th>
                 <th>Status</th>
             </tr>
         </thead>
@@ -36,7 +37,17 @@ else
                     <td>@loan.ReservationId</td>
                     <td>@loan.StartDate.ToString()</td>
                     <td>@loan.DueDate.ToString()</td>
-                    <td>@loan.ReturnDate.ToString()</td>
+                    @if (loan.ReturnDate.ToString().Equals("1/1/0001 0:00:00"))
+                    {
+                        Console.WriteLine("si entro al condicional");
+                        <td>unreturned</td>
+                    }
+                    else
+                    {
+                        Console.WriteLine(@loan.ReturnDate.ToString());
+                        Console.WriteLine("no entro al condicional");
+                        <td>@loan.ReturnDate.ToString()</td>
+                    }
                     <td>@loan.Status.ToString()</td>
 
                     @if (loan.Status.ToString().Equals("Active"))

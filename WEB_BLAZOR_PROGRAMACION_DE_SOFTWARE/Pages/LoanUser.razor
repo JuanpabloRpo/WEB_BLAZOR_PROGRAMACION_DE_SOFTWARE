@@ -39,23 +39,22 @@ else
                     <td>@loan.DueDate.ToString()</td>
                     @if (loan.ReturnDate.ToString().Equals("1/1/0001 0:00:00"))
                     {
-                        Console.WriteLine("si entro al condicional");
                         <td>unreturned</td>
                     }
                     else
                     {
-                        Console.WriteLine(@loan.ReturnDate.ToString());
-                        Console.WriteLine("no entro al condicional");
                         <td>@loan.ReturnDate.ToString()</td>
                     }
                     <td>@loan.Status.ToString()</td>
 
-                    @if (loan.Status.ToString().Equals("Active"))
+                    @if (@loan.Status.ToString().Equals("Active"))
                     {
                         <td>
-                            <input class="btn btn-success" type="button" value="Terminar prestamo" @onclick="Terminar" />
+                            <NavLink class="btn btn-success" href="@($"/CompleteLoan/{loan.LoanId}")">
+                                Terminar prestamo
+                            </NavLink>
+
                         </td>
-                        
                     }
                 </tr>
             }
@@ -71,9 +70,4 @@ else
     {
         loans = await loan.GetLoansUser(session.user.Id);
     }
-    protected void Terminar()
-    {
-
-    }
-
 }

@@ -105,45 +105,34 @@ namespace WEB_BLAZOR_PROGRAMACION_DE_SOFTWARE.Services
                 return false;
             }
 
-        }
+        }*/
 
         public async Task<Boolean> ReturnLoan(int loanId, int userId)
         {
-            var loan = await _loanDAO.GetLoan(loanId);
-            if (loan == null)
+            Console.WriteLine("ReservationService.CreateReservation() llamado.");
+            try
             {
-                _logger.LogError($"No se encontró el préstamo con ID: {loanId}.");
-                return false;
-            }
-            if (loan.UserId != userId)
-            {
-                _logger.LogError($"El préstamo con ID: {loanId} no pertenece al usuario con ID: {userId}.");
-                return false;
-            }
-            loan.ReturnDate = DateTime.Now;
-            bool resultado = await _loanDAO.ReturnLoan(loan);
-            if (resultado)
-            {
-                var reservacion = await _reservationDAO.GetReservation(loan.ReservationId);
-                var materialActualizado = await _materialDAO.UpdateMaterialStatus(reservacion.MaterialId, 0);
-                if (materialActualizado)
+
+                var response = await _httpClient.PutAsync($"{_baseApiUrl}/Devolver?loanId={loanId}&userId={userId}", null);
+                Console.WriteLine($"Respuesta de CreateReservation: Status Code - {response.StatusCode}");
+
+                if (response.IsSuccessStatusCode)
                 {
-                    _logger.LogInformation("Préstamo devuelto de manera exitosa.");
                     return true;
                 }
                 else
                 {
-                    _logger.LogError("Error al actualizar el estado del material.");
-                    return false;
+                    Console.WriteLine($"Error al crear la reserva materias: Status Code - {response.StatusCode}");
+                    return false; // O lanza una excepción más específica
                 }
             }
-            else
+            catch (Exception ex)
             {
-                _logger.LogError($"Error al devolver el préstamo con ID: {loan.LoanId}.");
-                return false;
+                Console.WriteLine($"Error al listar materias: {ex.Message}");
+                return false; // O lanza una excepción más específica
             }
         }
-
+        /*
         public async Task<Boolean> CancelLoan(int loanId, int userId)
         {
             var loan = await _loanDAO.GetLoan(loanId);

@@ -37,7 +37,7 @@ namespace API_PROGRAMACION_DE_SOFTWARE.Services
                 _logger.LogWarning($"No se encontró el usuario con ID: {userId}.");
             }
             return user;
-        }
+        }*/
 
         public async Task<Boolean> CreateUser(User user)
         {
@@ -53,7 +53,7 @@ namespace API_PROGRAMACION_DE_SOFTWARE.Services
                 return false;
             }
         }
-
+        /*
         public async Task<Boolean> UpdateUser(User user)
         {
             var resultado = await _userDAO.UpdateUser(user);

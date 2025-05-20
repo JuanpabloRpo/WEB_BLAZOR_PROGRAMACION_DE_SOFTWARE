@@ -1,0 +1,34 @@
+﻿@using WEB_BLAZOR_PROGRAMACION_DE_SOFTWARE.Entities
+@using WEB_BLAZOR_PROGRAMACION_DE_SOFTWARE.Services
+@using WEB_BLAZOR_PROGRAMACION_DE_SOFTWARE.Interfaces
+@using WEB_BLAZOR_PROGRAMACION_DE_SOFTWARE.Enumerations
+@inject IUserService userService
+
+<h3>RegisterForm</h3>
+<h2>Cedula</h2>
+<input type="text" @bind-value="cedula" />
+<h2>Nombre</h2>
+
+<h2>Primer Apellido</h2>
+
+<h2>Segundo Apellido</h2>
+
+<h2>Edad</h2>
+
+<h2>Email</h2>
+
+<h2>Nombre de usuario</h2>
+
+<h2>Contraseña</h2>
+
+
+@code {
+    private string cedula;
+    private string nombre;
+    private string pApellido;
+    private string sApellido;
+    private int edad;
+    private string email;
+    private string nombreUsuario;
+    private string contraseñaUsuario;
+}

@@ -1,0 +1,29 @@
+﻿@page "/CancelarReserva/{reservaId:int}"
+@using WEB_BLAZOR_PROGRAMACION_DE_SOFTWARE.Services
+@using WEB_BLAZOR_PROGRAMACION_DE_SOFTWARE.Interfaces
+@using WEB_BLAZOR_PROGRAMACION_DE_SOFTWARE.Entities
+@inject UserSessionService session
+@inject IReservationService reservation
+
+@if(cancelarReserva == true)
+{
+    <h1>Se Cancelo la reserva con exito</h1>
+}
+else
+{
+    <h1>No se pudo cancelar la reserva</h1>
+}
+
+<h3>CancelarReserva</h3>
+
+@code {
+    [Parameter]
+    public int reservaId { get; set; }
+
+    bool cancelarReserva = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        cancelarReserva = await reservation.CancelReservation(reservaId, session.user.Id);
+    }
+}

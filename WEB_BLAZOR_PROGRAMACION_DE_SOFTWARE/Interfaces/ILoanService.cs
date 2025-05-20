@@ -6,8 +6,8 @@ namespace WEB_BLAZOR_PROGRAMACION_DE_SOFTWARE.Interfaces
     {/*
         Task<List<Loan>> ListLoans();
         Task<Loan> GetLoan(int loanId);
-        Task<Boolean> CreateLoan(int reservationId, int userId);
-        Task<Boolean> ReturnLoan(int loanId, int userId);
+        Task<Boolean> CreateLoan(int reservationId, int userId);*/
+        Task<Boolean> ReturnLoan(int loanId, int userId);/*
         Task<Boolean> CancelLoan(int loanId, int userId);
         Task<Boolean> DeleteLoan(int loanId);*/
         Task<List<Loan>> GetLoansUser(int UserId);

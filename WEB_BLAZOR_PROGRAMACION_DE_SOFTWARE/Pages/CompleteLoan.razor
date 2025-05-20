@@ -1,0 +1,28 @@
+﻿@page "/CompleteLoan/{loanId:int}"
+@using WEB_BLAZOR_PROGRAMACION_DE_SOFTWARE.Entities
+@using WEB_BLAZOR_PROGRAMACION_DE_SOFTWARE.Interfaces
+@using WEB_BLAZOR_PROGRAMACION_DE_SOFTWARE.Services
+@inject UserSessionService session
+@inject ILoanService loanService
+
+
+@if (completeLoan)
+{
+    <h1>Se a terminado el prestamo, tiene 1 hora para entregar el material</h1>
+}
+else
+{
+    <h1>No se a podido terminar el prestamo, dirijase a la biblioteca </h1>
+}
+
+@code {
+    [Parameter]
+    public int loanId { get; set; }
+
+    bool completeLoan = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        completeLoan = await loanService.ReturnLoan(loanId, session.user.Id);
+    }
+}

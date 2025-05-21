@@ -3,7 +3,7 @@ using WEB_BLAZOR_PROGRAMACION_DE_SOFTWARE.Entities;
 using WEB_BLAZOR_PROGRAMACION_DE_SOFTWARE.Interfaces;
 
 
-namespace API_PROGRAMACION_DE_SOFTWARE.Services
+namespace WEB_BLAZOR_PROGRAMACION_DE_SOFTWARE.Services
 {
     public class LoginService: ILoginService
     {
@@ -26,7 +26,7 @@ namespace API_PROGRAMACION_DE_SOFTWARE.Services
             {
 
                 var response = await _httpClient.GetAsync($"{_baseApiUrl}/VerificarUsuario?userName={UserName}&password={Password}");
-                Console.WriteLine($"Respuesta de ListMaterials: Status Code - {response.StatusCode}");
+                Console.WriteLine($"Respuesta de LoginService: Status Code - {response.StatusCode}");
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -37,7 +37,7 @@ namespace API_PROGRAMACION_DE_SOFTWARE.Services
                 }
                 else
                 {
-                    Console.WriteLine($"Error al listar materias: Status Code - {response.StatusCode}");
+                    Console.WriteLine($"Error al hacer el check del usuario: Status Code - {response.StatusCode}");
                     return null; // O lanza una excepción más específica
                 }
             }

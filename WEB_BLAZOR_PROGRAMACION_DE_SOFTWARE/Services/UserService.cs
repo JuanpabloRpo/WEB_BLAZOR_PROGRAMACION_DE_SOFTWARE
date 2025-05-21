@@ -1,21 +1,24 @@
-﻿using WEB_BLAZOR_PROGRAMACION_DE_SOFTWARE.Interfaces;
+﻿using System.Net.Http;
+using System.Net.Http.Json;
+using System.Text.Json;
 using WEB_BLAZOR_PROGRAMACION_DE_SOFTWARE.Entities;
+using WEB_BLAZOR_PROGRAMACION_DE_SOFTWARE.Interfaces;
 
 
-namespace API_PROGRAMACION_DE_SOFTWARE.Services
+namespace WEB_BLAZOR_PROGRAMACION_DE_SOFTWARE.Services
 {
     public class UserService : IUserService
-    {/*
+    {
         private readonly HttpClient _httpClient;
-        private readonly string _baseApiUrl = "https://localhost:7061/materias";
-        private readonly ILogger <MateriaNegocio> _logger;
+        private readonly string _baseApiUrl = "https://localhost:7213/api/User";
+        private readonly ILogger <UserService> _logger;
 
-        public MateriaNegocio(HttpClient httpClient, ILogger<MateriaNegocio> logger)
+        public UserService(HttpClient httpClient, ILogger<UserService> logger)
         {
             _httpClient = httpClient;
             _logger = logger;
         }
-
+        /*
         public async Task<List<User>> ListUsers()
         {
             List<User> result = await _userDAO.ListUsers();
@@ -37,23 +40,25 @@ namespace API_PROGRAMACION_DE_SOFTWARE.Services
                 _logger.LogWarning($"No se encontró el usuario con ID: {userId}.");
             }
             return user;
-        }
+        }*/
 
+        
         public async Task<Boolean> CreateUser(User user)
         {
-            var resultado = await _userDAO.CreateUser(user);
-            if (resultado)
+            try
             {
-                _logger.LogInformation("Usuario creado de manera exitosa.");
-                return true;
+                _logger.LogInformation($"Iniciando la llamada para guardar el usuario: {JsonSerializer.Serialize(user)}");
+                var response = await _httpClient.PostAsJsonAsync($"{_baseApiUrl}/Crear", user);
+                _logger.LogInformation($"Respuesta de CreateUser: Status Code - {response.StatusCode}");
+                return response.IsSuccessStatusCode;
             }
-            else
+            catch (Exception ex)
             {
-                _logger.LogError("Error al crear el usuario.");
-                return false;
+                _logger.LogError($"Error al guardar materia: {ex.Message}");
+                return false; // O lanza una excepción más específica
             }
         }
-
+        /*
         public async Task<Boolean> UpdateUser(User user)
         {
             var resultado = await _userDAO.UpdateUser(user);

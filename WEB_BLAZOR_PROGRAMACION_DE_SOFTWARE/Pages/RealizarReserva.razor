@@ -1,10 +1,31 @@
 ﻿@page "/RealizarReserva/{materialId:int}"
 @using WEB_BLAZOR_PROGRAMACION_DE_SOFTWARE.Services
+@using WEB_BLAZOR_PROGRAMACION_DE_SOFTWARE.Interfaces
+@using WEB_BLAZOR_PROGRAMACION_DE_SOFTWARE.Entities
+@inject UserSessionService session
+@inject IReservationService reservation
 
-<h3>Reserva del material</h3>
-<p>Material ID: @materialId</p>
+@if (@realizarReserva == true)
+{
+    <h1>>La reserva se ha realizado con exito</h1>
+    <h3>Reserva del material</h3>
+    <p>Material ID: @materialId</p>
+
+}
+else
+{
+    <h1>No se a podido realizar la reserva</h1>
+}
 
 @code {
     [Parameter]
     public int materialId { get; set; }
+
+    bool realizarReserva;
+
+    protected override async Task OnInitializedAsync()
+    {
+        realizarReserva = await reservation.CreateReservation(materialId,session.user.Id);
+    }
+    
 }

@@ -1,0 +1,31 @@
+﻿@page "/Register"
+@using WEB_BLAZOR_PROGRAMACION_DE_SOFTWARE.Forms
+
+@if (registroExitoso != null)
+{
+    <div @ref="alertaRef" tabindex="-1"
+         class="alerta-registro @(registroExitoso == true ? "alerta-exito" : "alerta-error")">
+        @(registroExitoso == true ? "✔ Registro exitoso" : "✘ El registro falló")
+    </div>
+}
+
+
+<RegisterForm OnRegistroCompletado="ResultadoRegistro" />
+
+@code {
+    private bool? registroExitoso = null;
+    private ElementReference alertaRef;
+
+    private async Task ResultadoRegistro(bool exito)
+    {
+        registroExitoso = exito;
+
+        await Task.Yield(); 
+        await alertaRef.FocusAsync();
+
+        await Task.Delay(9000);
+        registroExitoso = null;
+        StateHasChanged();
+    }
+}
+

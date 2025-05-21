@@ -4,19 +4,27 @@
 @inject NavigationManager Navigation
 @inject ILoginService loginUser
 
-<h3>LoginForm</h3>
-<p>Ingrese usuario y Password</p>
-<br />
-<input type="text" @bind-value="usuario" />
-<div></div>
-<input type="text" @bind-value="password" />
-<div></div>
-<input class="btn btn-success" type="button" value="iniciar" @onclick="Login" />
-<div></div>
+<div class="login-formulario">
+    <h3>LoginForm</h3>
+    <p>Ingrese usuario y contraseña</p>
+
+    <input type="text" placeholder="Usuario" @bind-value="usuario" />
+    <input type="password" placeholder="Contraseña" @bind-value="password" />
+    @if (!usuarioCorrecto)
+    {
+        <h3 class="mensaje-error">Usuario incorrecto</h3>
+    }
+
+    <input type="button" value="Iniciar" class="btn btn-success" @onclick="Login" />
+    
+    
+</div>
+
 
 @code {
-    string usuario;
-    string password;
+    private string usuario;
+    private string password;
+    private bool usuarioCorrecto = true;
 
     public async Task Login()
     {
@@ -26,6 +34,11 @@
             session.IniciarSesion(user);
             Navigation.NavigateTo("/");
         }
-        
+        else
+        {
+            usuarioCorrecto = false;
+            StateHasChanged();
+        }
+
     }
 }

@@ -2,10 +2,9 @@
 using System.Text.Json;
 using WEB_BLAZOR_PROGRAMACION_DE_SOFTWARE.Entities;
 using WEB_BLAZOR_PROGRAMACION_DE_SOFTWARE.Interfaces;
-using WEB_BLAZOR_PROGRAMACION_DE_SOFTWARE.Pages;
 
 
-namespace API_PROGRAMACION_DE_SOFTWARE.Services
+namespace WEB_BLAZOR_PROGRAMACION_DE_SOFTWARE.Services
 {
     public class ReservationService : IReservationService
     {

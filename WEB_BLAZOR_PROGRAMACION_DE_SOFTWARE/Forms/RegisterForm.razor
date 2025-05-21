@@ -2,27 +2,54 @@
 @using WEB_BLAZOR_PROGRAMACION_DE_SOFTWARE.Services
 @using WEB_BLAZOR_PROGRAMACION_DE_SOFTWARE.Interfaces
 @using WEB_BLAZOR_PROGRAMACION_DE_SOFTWARE.Enumerations
+@using WEB_BLAZOR_PROGRAMACION_DE_SOFTWARE.Utilities
 @inject IUserService userService
 
-<h3>RegisterForm</h3>
-<h2>Cedula</h2>
-<input type="text" @bind-value="cedula" />
-<h2>Nombre</h2>
 
-<h2>Primer Apellido</h2>
 
-<h2>Segundo Apellido</h2>
 
-<h2>Edad</h2>
 
-<h2>Email</h2>
+<div class="formulario">
+    <h3>Formulario de registro</h3>
+    <h2>Cédula</h2>
+    <input type="text" @bind-value="cedula" />
 
-<h2>Nombre de usuario</h2>
+    <h2>Nombre</h2>
+    <input type="text" @bind-value="nombre" />
 
-<h2>Contraseña</h2>
+    <h2>Primer Apellido</h2>
+    <input type="text" @bind-value="pApellido" />
 
+    <h2>Segundo Apellido</h2>
+    <input type="text" @bind-value="sApellido" />
+
+    <h2>Edad</h2>
+    <input type="number" min="13" max="80" @bind-value="edad" />
+
+    <h2>Email</h2>
+    <input type="email" @bind-value="email" />
+
+    <h2>Nombre de usuario</h2>
+    <input type="text" @bind-value="nombreUsuario" />
+
+    <h2>Contraseña</h2>
+    <input type="password" @bind-value="contrasenaUsuario" />
+
+    <h2>Tipo de usuario</h2>
+    <select class="form-select" @bind="tipoDeUsuario">
+        <option disabled selected>Seleccione un tipo</option>
+        <option typeof="text" value="Student">Estudiante</option>
+        <option typeof="text" value="Teacher">Profesor</option>
+        <option typeof="text" value="Employee">Empleado</option>
+    </select>
+
+    <input class="btn btn-success" type="button" value="Iniciar" @onclick="Register" />
+</div>
 
 @code {
+    [Parameter]
+    public EventCallback<bool> OnRegistroCompletado { get; set; }
+
     private string cedula;
     private string nombre;
     private string pApellido;
@@ -30,5 +57,26 @@
     private int edad;
     private string email;
     private string nombreUsuario;
-    private string contraseñaUsuario;
+    private string contrasenaUsuario;
+    private string tipoDeUsuario;
+
+
+    private async Task Register()
+    {
+        var newUser = new User(
+            cedula,
+            nombre,
+            pApellido,
+            sApellido,
+            edad,
+            email,
+            nombreUsuario,
+            contrasenaUsuario,
+            (UserType)ConversorEnumInt.UserTypeConver(tipoDeUsuario)
+        );
+         
+        bool registro = await userService.CreateUser(newUser);
+        await OnRegistroCompletado.InvokeAsync(registro);
+        StateHasChanged();
+    }
 }

@@ -19,10 +19,10 @@ else
 {
     <h3>listar Materias</h3>
     <button class="btn btn-primary m-2" @onclick="ViewAllMaterials">Materiales</button>
-    <button class="btn btn-secondary m-2" @onclick="ViewAvailableMaterials">Materiales Disponibles</button>
+    <button class="btn btn-primary m-2" @onclick="ViewAvailableMaterials">Materiales Disponibles</button>
     @if (tablaMostrada.Equals("All"))
     {
-        <table class="table">
+        <table class="tabla-materiales">
             <thead>
                 <tr>
                     <th>MaterialId</th>
@@ -62,7 +62,7 @@ else
     }
     else
     {
-        <table class="table">
+        <table class="tabla-materiales">
             <thead>
                 <tr>
                     <th>MaterialId</th>

@@ -1,0 +1,63 @@
+﻿.login-formulario {
+    max-width: 400px;
+    margin: 60px auto;
+    padding: 25px 30px;
+    background-color: #fefefe;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+    .login-formulario h3 {
+        font-size: 22px;
+        margin-bottom: 10px;
+        text-align: center;
+        color: #333;
+    }
+
+h3.mensaje-error {
+    color: red;
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 15px;
+}
+
+    .login-formulario p {
+        text-align: center;
+        color: #666;
+        font-size: 14px;
+    }
+
+    .login-formulario input[type="text"],
+    .login-formulario input[type="password"] {
+        width: 100%;
+        padding: 10px;
+        margin-top: 8px;
+        margin-bottom: 15px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        font-size: 14px;
+    }
+
+        .login-formulario input[type="text"]:focus,
+        .login-formulario input[type="password"]:focus {
+            outline: none;
+            border-color: #28a745;
+            box-shadow: 0 0 5px rgba(40,167,69,0.3);
+        }
+
+    .login-formulario input[type="button"] {
+        width: 100%;
+        padding: 10px;
+        background-color: #28a745;
+        border: none;
+        color: white;
+        font-weight: bold;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+        .login-formulario input[type="button"]:hover {
+            background-color: #218838;
+        }

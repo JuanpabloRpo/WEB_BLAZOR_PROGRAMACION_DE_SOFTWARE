@@ -3,7 +3,7 @@ using WEB_BLAZOR_PROGRAMACION_DE_SOFTWARE.Entities;
 using WEB_BLAZOR_PROGRAMACION_DE_SOFTWARE.Interfaces;
 
 
-namespace API_PROGRAMACION_DE_SOFTWARE.Services
+namespace WEB_BLAZOR_PROGRAMACION_DE_SOFTWARE.Services
 {
     public class MaterialService : IMaterialService
     {

@@ -1,0 +1,33 @@
+﻿.tabla-loan {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+    .tabla-loan th {
+        background-color: #28a745;
+        color: white;
+        padding: 12px;
+        text-align: left;
+        font-size: 14px;
+        text-transform: uppercase;
+    }
+
+    .tabla-loan td {
+        padding: 12px;
+        border-bottom: 1px solid #dddddd;
+        font-size: 14px;
+    }
+
+    .tabla-loan tr:hover {
+        background-color: #f1f1f1;
+    }
+
+.btn-success {
+    padding: 5px 10px;
+    font-size: 13px;
+}

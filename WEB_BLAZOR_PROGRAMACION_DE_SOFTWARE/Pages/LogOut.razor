@@ -2,9 +2,14 @@
 @inject UserSessionService session
 @inject NavigationManager Navigation
 
-<h3>@session.user.FirstName  @session.user.LastName</h3>
-<h3>Hata luego</h3>
-<input class="btn btn-success" type="button" value="Salir" @onclick="logout" />
+<div class="despedida-biblioteca">
+    <h3>@session.user.FirstName @session.user.LastName</h3>
+    <h2>¡Hasta luego!</h2>
+    <p>Gracias por visitar la biblioteca. Esperamos verte pronto para seguir descubriendo el mundo de los libros.</p>
+
+    <input class="btn btn-success" type="button" value="Salir" @onclick="logout" />
+</div>
+
 @code {
     public void logout()
     {

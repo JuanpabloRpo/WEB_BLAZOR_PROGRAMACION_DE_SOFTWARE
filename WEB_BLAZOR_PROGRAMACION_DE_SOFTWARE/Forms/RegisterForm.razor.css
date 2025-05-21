@@ -48,3 +48,15 @@ input[type="button"] {
     input[type="button"]:hover {
         background-color: #218838;
     }
+
+@keyframes fadeOutIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

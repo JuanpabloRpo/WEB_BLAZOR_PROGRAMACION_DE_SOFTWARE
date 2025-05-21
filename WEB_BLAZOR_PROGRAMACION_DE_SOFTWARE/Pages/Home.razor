@@ -5,15 +5,21 @@
 <PageTitle>Home Principal</PageTitle>
 
 
-@if (session.user.Id !=0 )
-{
-    <h1>Bienvenido @session.user.FirstName @session.user.MiddleName @session.user.LastName =  @session.user.Id  a la Libreria</h1>
-    <h2>Esperamos que puesdas encontrar todos tus libros y puedas disfrutar de este mundo de la literatura</h2>
-}
-else
-{
-    <h1>Bienvenido a la libreria de la universidad</h1>
-
-    <h3>Aqui podras encontrar diversos libros y podras reservarlos para que te los prestemos</h3>
-}
-
+<div class="portada-biblioteca">
+    @if (session.user.Id != 0)
+    {
+        <h1>Bienvenido @session.user.FirstName @session.user.MiddleName @session.user.LastName</h1>
+        <h2>
+            Nos alegra tenerte de vuelta en la biblioteca.<br />
+            Gestiona tus préstamos, reservas y descubre nuevas lecturas.
+        </h2>
+    }
+    else
+    {
+        <h1>Bienvenido a la Biblioteca Digital de la Universidad</h1>
+        <h3>
+            Explora nuestro catálogo, encuentra libros de interés,
+            y realiza tus reservas desde cualquier lugar.
+        </h3>
+    }
+</div>

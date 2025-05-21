@@ -1,0 +1,35 @@
+﻿.portada-biblioteca {
+    max-width: 800px;
+    margin: 60px auto;
+    padding: 40px;
+    background-color: #f9f9f9;
+    border-radius: 15px;
+    text-align: center;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    animation: fadeIn 0.6s ease-in-out;
+}
+
+    .portada-biblioteca h1 {
+        font-size: 32px;
+        color: #2c3e50;
+        margin-bottom: 20px;
+    }
+
+    .portada-biblioteca h2,
+    .portada-biblioteca h3 {
+        font-size: 20px;
+        color: #555;
+        line-height: 1.6;
+    }
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

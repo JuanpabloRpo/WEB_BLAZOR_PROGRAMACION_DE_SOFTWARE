@@ -8,11 +8,17 @@
 
 @if (completeLoan)
 {
-    <h1>Se a terminado el prestamo, tiene 1 hora para entregar el material</h1>
+    <div class="informacion-exito">
+        <h2>!Se a terminado el prestamo!</h2>
+        <h3>tiene 1 hora para entregar el material</h3>
+    </div>
 }
 else
 {
-    <h1>No se a podido terminar el prestamo, dirijase a la biblioteca </h1>
+    <div class="informacion-error">
+        <h2>!No se a podido terminar el prestamo!</h2>
+        <h3>dirijase a la biblioteca</h3>
+    </div>
 }
 
 @code {

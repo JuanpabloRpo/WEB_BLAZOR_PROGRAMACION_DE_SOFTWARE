@@ -5,53 +5,59 @@
 @inject IReservationService reservation
 @inject UserSessionService session
 
-<h2>Las reservas que has hecho son: </h2>
-@if (reservas == null)
-{
-    <p><em>No se pudo acceder a la base de datos</em></p>
-}
-else if (reservas.Count == 0)
-{
-    <p><em>No hay reservas disponibles.</em></p>
-}
-else
-{
-    <table class="tabla-Reservation">
-        <thead>
-            <tr>
-                <th>ReservationId</th>
-                <th>Usuario</th>
-                <th>material</th>
-                <th>RequestDate </th>
-                <th>ExpirationDate</th>
-                <th>Status</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var reserva in reservas)
-            {
+<div class="contenedor-tabla">
+    
+    <h2>Las reservas que has hecho son: </h2>
+    @if (reservas == null)
+    {
+        <div class="informacion-baseDeDatos">
+            <h3>!No se pudo acceder a la base de datos!</h3>
+        </div>
+    }
+    else if (reservas.Count == 0)
+    {
+        <div class="informacion-reservas">
+            <h3>!No hay materias disponibles!</h3>
+        </div>
+    }
+    else
+    {
+        <table class="tabla-Reservation">
+            <thead>
                 <tr>
-                    <td>@reserva.ReservationId</td>
-                    <td>@session.user.FirstName @session.user.LastName</td>
-                    <td>@reserva.MaterialId</td>
-                    <td>@reserva.RequestDate.ToString()</td>
-                    <td>@reserva.ExpirationDate.ToString()</td>
-                    <td>@reserva.Status.ToString()</td>
-                    @if (reserva.Status.ToString().Equals("Pending"))
-                    {
-                        <td>
-                            <NavLink class="btn btn-success" href="@($"/CancelarReserva/{reserva.ReservationId}")">
-                                Cancelar Reserva
-                            </NavLink>
-
-                        </td>
-                    }
+                    <th>ReservationId</th>
+                    <th>Usuario</th>
+                    <th>material</th>
+                    <th>RequestDate </th>
+                    <th>ExpirationDate</th>
+                    <th>Status</th>
                 </tr>
-            }
-        </tbody>
-    </table>
-}
+            </thead>
+            <tbody>
+                @foreach (var reserva in reservas)
+                {
+                    <tr>
+                        <td>@reserva.ReservationId</td>
+                        <td>@session.user.FirstName @session.user.LastName</td>
+                        <td>@reserva.MaterialId</td>
+                        <td>@reserva.RequestDate.ToString()</td>
+                        <td>@reserva.ExpirationDate.ToString()</td>
+                        <td>@reserva.Status.ToString()</td>
+                        @if (reserva.Status.ToString().Equals("Pending"))
+                        {
+                            <td>
+                                <NavLink class="btn btn-success" href="@($"/CancelarReserva/{reserva.ReservationId}")">
+                                    Cancelar Reserva
+                                </NavLink>
 
+                            </td>
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>
 @code {
     private List<Reservation> reservas;
 
@@ -61,4 +67,3 @@ else
     }
 
 }
-

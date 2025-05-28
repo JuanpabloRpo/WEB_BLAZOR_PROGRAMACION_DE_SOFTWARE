@@ -7,14 +7,17 @@
 
 @if (@realizarReserva == true)
 {
-    <h1>>La reserva se ha realizado con exito</h1>
-    <h3>Reserva del material</h3>
-    <p>Material ID: @materialId</p>
+    <div class="realizar-reserva">
+        <h2>¡La reserva se ha realizado con exito!</h2>
+    </div>
+    
 
 }
 else
 {
-    <h1>No se a podido realizar la reserva</h1>
+    <div class="no-realizar-reserva">
+        <h2>¡No se a podido realizar la reserva!</h2>
+    </div>
 }
 
 @code {

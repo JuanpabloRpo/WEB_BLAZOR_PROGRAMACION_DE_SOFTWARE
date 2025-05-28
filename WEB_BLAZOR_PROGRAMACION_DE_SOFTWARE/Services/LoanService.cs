@@ -2,6 +2,7 @@
 using System.Text.Json;
 using WEB_BLAZOR_PROGRAMACION_DE_SOFTWARE.Entities;
 using WEB_BLAZOR_PROGRAMACION_DE_SOFTWARE.Interfaces;
+using WEB_BLAZOR_PROGRAMACION_DE_SOFTWARE.Pages;
 
 
 namespace WEB_BLAZOR_PROGRAMACION_DE_SOFTWARE.Services
@@ -72,39 +73,34 @@ namespace WEB_BLAZOR_PROGRAMACION_DE_SOFTWARE.Services
                 
             }
             return loan;
-        }
-
+        }*/
+        
         public async Task<Boolean> CreateLoan(int reservationId, int userId)
         {
-            // la reservacion tiene que estar en pendiente 
-            if (!await _reservationDAO.CheckReservationPending(reservationId))
+            Console.WriteLine("LoanService.CreateLoan() llamado.");
+            try
             {
-                _logger.LogError("Reservacion NO Pendiente/Existe");
-                return false;
+
+                var response = await _httpClient.PostAsync($"{_baseApiUrl}/Crear?reservationId={reservationId}&userId={userId}", null);
+                Console.WriteLine($"Respuesta de CreateLoan: Status Code - {response.StatusCode}");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return true;
+                }
+                else
+                {
+                    Console.WriteLine($"Error al crear el prestamo del material: Status Code - {response.StatusCode}");
+                    return false; // O lanza una excepción más específica
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error al listar materias: {ex.Message}");
+                return false; // O lanza una excepción más específica
             }
 
-            // Se crea el nuevo prestamo
-            var resultado = await _loanDAO.CreateLoan(reservationId, userId);
-
-            // Se actualiza la reservacion de pending a accepted
-            var reservationActualizado = await _reservationDAO.UpdateReservationStatus(reservationId, 1);
-
-            // Se trae la reservacion para saber el Id del material para cambiar su Status
-            var reservacion = await _reservationDAO.GetReservation(reservationId);
-            var materialActualizado = await _materialDAO.UpdateMaterialStatus(reservacion.MaterialId, 2);
-
-            if (resultado && reservationActualizado && materialActualizado)
-            {
-                _logger.LogInformation("Préstamo creado de manera exitosa.");
-                return true;
-            }
-            else
-            {
-                _logger.LogError("Error al crear el préstamo.");
-                return false;
-            }
-
-        }*/
+        }
 
         public async Task<Boolean> ReturnLoan(int loanId, int userId)
         {

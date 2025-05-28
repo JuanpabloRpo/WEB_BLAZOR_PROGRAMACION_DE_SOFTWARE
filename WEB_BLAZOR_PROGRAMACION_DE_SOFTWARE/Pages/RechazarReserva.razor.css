@@ -1,0 +1,47 @@
+﻿.informacion-exito {
+    max-width: 600px;
+    margin: 80px auto;
+    padding: 30px;
+    background-color: #eef7f1;
+    border-radius: 15px;
+    text-align: center;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    animation: fadeOutIn 0.6s ease-in-out;
+}
+
+
+    .informacion-exito h3 {
+        font-size: 20px;
+        color: #40916c;
+        margin-bottom: 5px;
+    }
+
+.informacion-error {
+    max-width: 600px;
+    margin: 80px auto;
+    padding: 30px;
+    background-color: #f8d7da;
+    border-radius: 15px;
+    text-align: center;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    animation: fadeOutIn 0.6s ease-in-out;
+}
+
+
+    .informacion-error h3 {
+        font-size: 20px;
+        color: #721c24;
+        margin-bottom: 5px;
+    }
+
+@keyframes fadeOutIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

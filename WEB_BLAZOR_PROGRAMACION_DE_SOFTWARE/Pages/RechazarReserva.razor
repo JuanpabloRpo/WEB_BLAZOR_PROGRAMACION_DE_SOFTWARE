@@ -1,0 +1,35 @@
+﻿@page "/RechazarReserva/{reservationId:int}/{userId:int}"
+@using WEB_BLAZOR_PROGRAMACION_DE_SOFTWARE.Entities
+@using WEB_BLAZOR_PROGRAMACION_DE_SOFTWARE.Interfaces
+@using WEB_BLAZOR_PROGRAMACION_DE_SOFTWARE.Services
+@inject UserSessionService session
+@inject IReservationService reservaService
+
+
+@if (isRechazada == true && session.user.Role.ToString().Equals("Librarian"))
+{
+    <div class="informacion-exito">
+        <h3>!Reserva rechazado con exito!</h3>
+    </div>
+}
+else
+{
+    <div class="informacion-error">
+        <h3>!No se pudo rechazar la reserva!</h3>
+    </div>
+}
+
+
+
+@code {
+    [Parameter]
+    public int reservationId { get; set; }
+    [Parameter]
+    public int userId { get; set; }
+
+    private bool isRechazada = false;
+    protected override async Task OnInitializedAsync()
+    {
+        isRechazada = await reservaService.RejectReservation(reservationId, userId);
+    }
+}

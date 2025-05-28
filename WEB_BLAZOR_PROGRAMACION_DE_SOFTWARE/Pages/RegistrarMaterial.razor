@@ -1,5 +1,4 @@
-﻿@page "/Register"
-@using WEB_BLAZOR_PROGRAMACION_DE_SOFTWARE.Forms
+﻿@page "/RegistrarMaterial"
 
 @if (registroExitoso != null)
 {
@@ -10,7 +9,7 @@
 }
 
 
-<RegisterForm OnRegistroCompletado="ResultadoRegistro" />
+<RegisterMaterialForm OnRegistroCompletado="ResultadoRegistro" />
 
 @code {
     private bool? registroExitoso = null;
@@ -20,7 +19,7 @@
     {
         registroExitoso = exito;
 
-        await Task.Yield(); 
+        await Task.Yield();
         await alertaRef.FocusAsync();
 
         await Task.Delay(9000);
@@ -28,4 +27,3 @@
         StateHasChanged();
     }
 }
-

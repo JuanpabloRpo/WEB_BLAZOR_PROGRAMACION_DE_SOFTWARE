@@ -7,14 +7,16 @@
 
 @if(cancelarReserva == true)
 {
-    <h1>Se Cancelo la reserva con exito</h1>
+    <div class="cancelar-reserva">
+        <h2>¡Se Cancelo la reserva con exito!</h2>
+    </div>
 }
 else
 {
-    <h1>No se pudo cancelar la reserva</h1>
+    <div class="cancelar-no-reserva">
+        <h2>¡No se pudo cancelar la reserva!</h2>
+    </div>
 }
-
-<h3>CancelarReserva</h3>
 
 @code {
     [Parameter]

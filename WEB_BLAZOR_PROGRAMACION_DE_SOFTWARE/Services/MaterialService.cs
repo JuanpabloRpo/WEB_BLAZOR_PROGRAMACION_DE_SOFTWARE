@@ -1,6 +1,8 @@
-﻿using System.Text.Json;
+﻿using System.Net.Http.Json;
+using System.Text.Json;
 using WEB_BLAZOR_PROGRAMACION_DE_SOFTWARE.Entities;
 using WEB_BLAZOR_PROGRAMACION_DE_SOFTWARE.Interfaces;
+using WEB_BLAZOR_PROGRAMACION_DE_SOFTWARE.Pages;
 
 
 namespace WEB_BLAZOR_PROGRAMACION_DE_SOFTWARE.Services
@@ -77,40 +79,90 @@ namespace WEB_BLAZOR_PROGRAMACION_DE_SOFTWARE.Services
             }
         }
     
-        /*
+        
         public async Task<Material> GetMaterial(int materialId)
         {
-            
-            var material = await _materialDAO.GetMaterial(materialId);
-            if (material != null)
+
+            Console.WriteLine("MaterialService.GetMaterial() llamado.");
+            try
             {
-                _logger.LogInformation($"Material con ID: {materialId} encontrado.");
-                
+
+                var response = await _httpClient.GetAsync($"{_baseApiUrl}/Listar");
+                Console.WriteLine($"Respuesta de GetMaterial: Status Code - {response.StatusCode}");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var content = await response.Content.ReadAsStringAsync();
+                    var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+                    var material = JsonSerializer.Deserialize<Material>(content, options);
+                    return material;
+                }
+                else
+                {
+                    Console.WriteLine($"Error al obtener el  material: Status Code - {response.StatusCode}");
+                    return null; // O lanza una excepción más específica
+                }
             }
-            else
+            catch (Exception ex)
             {
-                _logger.LogWarning($"No se encontró el material con ID: {materialId}.");
-                
+                Console.WriteLine($"Error al obtener el material: {ex.Message}");
+                return null; // O lanza una excepción más específica
             }
-            return material;
         }
 
-        public async Task<Boolean> CreateMaterial(Material material)
+        public async Task<Boolean> CreateMaterial(Book material)
         {
-            
-            var result = await _materialDAO.CreateMaterial(material);
-            if (result)
+
+            Console.WriteLine("MaterialService.CreateMaterial() llamado.");
+            try
             {
-                _logger.LogInformation("Material creado exitosamente.");
-                return true;
+
+                var response = await _httpClient.PostAsJsonAsync($"{_baseApiUrl}/CrearLibro", material);
+                Console.WriteLine($"Respuesta de CreateReservation: Status Code - {response.StatusCode}");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return true;
+                }
+                else
+                {
+                    Console.WriteLine($"Error al crear el material: Status Code - {response.StatusCode}");
+                    return false; // O lanza una excepción más específica
+                }
             }
-            else
+            catch (Exception ex)
             {
-                _logger.LogError("Error al crear el material.");
-                return false;
+                Console.WriteLine($"Error al crear el material: {ex.Message}");
+                return false; // O lanza una excepción más específica
             }
         }
+        public async Task<Boolean> CreateMaterial(Audiovisual material)
+        {
 
+            Console.WriteLine("MaterialService.CreateMaterial() llamado.");
+            try
+            {
+
+                var response = await _httpClient.PostAsJsonAsync($"{_baseApiUrl}/CrearAudioVisual", material);
+                Console.WriteLine($"Respuesta de CreateReservation: Status Code - {response.StatusCode}");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return true;
+                }
+                else
+                {
+                    Console.WriteLine($"Error al crear el material: Status Code - {response.StatusCode}");
+                    return false; // O lanza una excepción más específica
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error al crear el material: {ex.Message}");
+                return false; // O lanza una excepción más específica
+            }
+        }
+        /*
         public async Task<Boolean> UpdateMaterial(Material material)
         {
             

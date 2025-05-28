@@ -5,63 +5,70 @@
 @inject ILoanService loan
 @inject UserSessionService session
 
-<h2>Los prestamos que has hecho son: </h2>
-@if (loans == null)
-{
-    <p><em>No se pudo acceder a la base de datos</em></p>
-}
-else if (loans.Count == 0)
-{
-    <p><em>No hay prestamos disponibles.</em></p>
-}
-else
-{
-    <table class="tabla-loan">
-        <thead>
-            <tr>
-                <th>LoanId</th>
-                <th>Usuario</th>
-                <th>ReservationId</th>
-                <th>RequestDate </th>
-                <th>ExpirationDate</th>
-                <th>ReturnDate</th>
-                <th>Status</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var loan in loans)
-            {
+
+<div class="contenedor-tabla">
+
+    <h2>Los prestamos que has hecho son: </h2>
+    @if (loans == null)
+    {
+        <div class="informacion-baseDeDatos">
+            <h3>!No se pudo acceder a la base de datos!</h3>
+        </div>
+    }
+    else if (loans.Count == 0)
+    {
+        <div class="informacion-prestamos">
+            <h3>!No hay prestamos disponibles!</h3>
+        </div>
+    }
+    else
+    {
+        <table class="tabla-loan">
+            <thead>
                 <tr>
-                    <td>@loan.LoanId</td>
-                    <td>@session.user.FirstName @session.user.LastName</td>
-                    <td>@loan.ReservationId</td>
-                    <td>@loan.StartDate.ToString()</td>
-                    <td>@loan.DueDate.ToString()</td>
-                    @if (loan.ReturnDate.ToString().Equals("1/1/0001 0:00:00"))
-                    {
-                        <td>unreturned</td>
-                    }
-                    else
-                    {
-                        <td>@loan.ReturnDate.ToString()</td>
-                    }
-                    <td>@loan.Status.ToString()</td>
-
-                    @if (@loan.Status.ToString().Equals("Active"))
-                    {
-                        <td>
-                            <NavLink class="btn btn-success" href="@($"/CompleteLoan/{loan.LoanId}")">
-                                Terminar prestamo
-                            </NavLink>
-
-                        </td>
-                    }
+                    <th>LoanId</th>
+                    <th>Usuario</th>
+                    <th>ReservationId</th>
+                    <th>RequestDate </th>
+                    <th>ExpirationDate</th>
+                    <th>ReturnDate</th>
+                    <th>Status</th>
                 </tr>
-            }
-        </tbody>
-    </table>
-}
+            </thead>
+            <tbody>
+                @foreach (var loan in loans)
+                {
+                    <tr>
+                        <td>@loan.LoanId</td>
+                        <td>@session.user.FirstName @session.user.LastName</td>
+                        <td>@loan.ReservationId</td>
+                        <td>@loan.StartDate.ToString()</td>
+                        <td>@loan.DueDate.ToString()</td>
+                        @if (loan.ReturnDate.ToString().Equals("1/1/0001 0:00:00"))
+                        {
+                            <td>unreturned</td>
+                        }
+                        else
+                        {
+                            <td>@loan.ReturnDate.ToString()</td>
+                        }
+                        <td>@loan.Status.ToString()</td>
 
+                        @if (@loan.Status.ToString().Equals("Active"))
+                        {
+                            <td>
+                                <NavLink class="btn btn-success" href="@($"/CompleteLoan/{loan.LoanId}")">
+                                    Terminar prestamo
+                                </NavLink>
+
+                            </td>
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>
 
 @code {
     private List<Loan> loans;

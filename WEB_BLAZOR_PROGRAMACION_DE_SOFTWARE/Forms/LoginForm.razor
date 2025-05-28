@@ -12,12 +12,18 @@
     <input type="password" placeholder="Contraseña" @bind-value="password" />
     @if (!usuarioCorrecto)
     {
-        <h3 class="mensaje-error">Usuario incorrecto</h3>
+        <div class="popup" @onclick="CerrarPopup">
+            <div class="popup-content" @onclick:stopPropagation>
+                <div class="login-formulario">
+                    <h1 class="mensaje-error">Usuario incorrecto</h1>
+                    <input type="button" value="Cerrar" @onclick="CerrarPopup" />
+                </div>
+            </div>
+        </div>
     }
 
     <input type="button" value="Iniciar" class="btn btn-success" @onclick="Login" />
-    
-    
+
 </div>
 
 
@@ -40,5 +46,10 @@
             StateHasChanged();
         }
 
+    }
+    private void CerrarPopup()
+    {
+        usuarioCorrecto = true;
+        StateHasChanged();
     }
 }

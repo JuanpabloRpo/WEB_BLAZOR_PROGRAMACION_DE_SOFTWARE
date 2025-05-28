@@ -1,0 +1,229 @@
+﻿@using WEB_BLAZOR_PROGRAMACION_DE_SOFTWARE.Entities
+@using WEB_BLAZOR_PROGRAMACION_DE_SOFTWARE.Services
+@using WEB_BLAZOR_PROGRAMACION_DE_SOFTWARE.Interfaces
+@using WEB_BLAZOR_PROGRAMACION_DE_SOFTWARE.Enumerations
+@using WEB_BLAZOR_PROGRAMACION_DE_SOFTWARE.Utilities
+@inject IMaterialService materialService
+
+
+<div class="formulario">
+    @if (!string.IsNullOrWhiteSpace(mensajeError))
+    {
+        <div class="popup" @onclick="CerrarPopup">
+            <div class="popup-content" @onclick:stopPropagation>
+                <div class="login-formulario">
+                    <h1 class="mensaje-error">@mensajeError</h1>
+                    <input type="button" value="Cerrar" @onclick="CerrarPopup" />
+                </div>
+            </div>
+        </div>
+    }
+    <h3>Formulario de registro</h3>
+
+    <h2>Tipo de material</h2>
+    <select class="form-select" @bind="DiscriminatorPage">
+        <option disabled selected>Seleccione un tipo</option>
+        <option typeof="text" value="Libro">Libro</option>
+        <option typeof="text" value="Audiovisual">Audiovisual</option>
+    </select>
+    
+    <h2>Titulo</h2>
+    <input type="text" @bind-value="title" />
+
+    <h2>Autor</h2>
+    <input type="text" @bind-value="author" />
+
+    <h2>Año de publicación</h2>
+    <input type="number" min="0" max="2025" @bind-value="publicationYear" />
+
+    <h2>Condición</h2>
+    <select class="form-select" @bind="condition">
+        <option disabled selected>Seleccione un tipo</option>
+        @foreach (var item in Enum.GetValues<MaterialCondition>())
+        {
+            <option value="@item">@Conversor.GetDisplayName(item)</option>
+        }
+    </select>
+
+    <h2>Tema</h2>
+    <select class="form-select" @bind="topic">
+        <option disabled selected value="">Seleccione un tipo</option>
+        @foreach (var item in Enum.GetValues<MaterialTopic>())
+        {
+            <option value="@item">@Conversor.GetDisplayName(item)</option>
+        }
+    </select>
+
+    @if (discriminator.Equals("Libro"))
+    {
+        <h2>Paginas</h2>
+        <input type="number" min="49 " max="3.031" @bind-value="pages" />
+    }
+    else
+    {
+        <h2>Formato</h2>
+        <select class="form-select" @bind="format">
+            <option disabled selected>Seleccione un tipo</option>
+            <option typeof="text" value="Video">video</option>
+            <option typeof="text" value="Mp3">Mp3</option>
+        </select>
+
+        <h2>Duracion en minutos</h2>
+        <input type="text" @bind-value="duration" />   
+    }
+
+    <input class="btn btn-success" type="button" value="Registrar Libro" @onclick="Register" />
+</div>
+
+@code {
+    [Parameter]
+    public EventCallback<bool> OnRegistroCompletado { get; set; }
+
+    private string title = "";
+    private string author = "";
+    private int publicationYear = 0;
+    private MaterialStatus status = MaterialStatus.Available;
+    private string condition = "";
+    private string topic = "";
+    private string discriminator = "";
+    private string? format;
+    private string? duration;
+    private int? pages;
+    private string mensajeError = "";
+
+    private string DiscriminatorPage
+    {
+        get => discriminator;
+        set
+        {
+            discriminator = value;
+            if (discriminator != "Libro")
+            {
+                pages = null;
+            }
+            else
+            {
+                format = null;
+                duration = null;
+            }
+        }
+    }
+
+    private async Task Register()
+    {
+        Book newMaterialBook;
+        Audiovisual newMaterialAudiovisual;
+        bool registro;
+        await mensaje();
+
+        if (!string.IsNullOrWhiteSpace(mensajeError))
+        {
+            return;
+        }
+
+        if (DiscriminatorPage == "Libro")
+        {
+            newMaterialBook = new Book
+            {
+                Title = title,
+                Author = author,
+                PublicationYear = publicationYear,
+                Status = status,
+                Condition = (MaterialCondition)ConversorEnumInt.MateriaConditionConver(condition),
+                Topic = (MaterialTopic)ConversorEnumInt.MateriaTopicConver(topic),
+                Pages = pages ?? 0,
+                Discriminator = DiscriminatorPage
+            };
+            registro = await materialService.CreateMaterial(newMaterialBook);
+        }
+        else
+        {
+            newMaterialAudiovisual = new Audiovisual
+            {
+                Title = title,
+                Author = author,
+                PublicationYear = publicationYear,
+                Status = status,
+                Condition = (MaterialCondition)ConversorEnumInt.MateriaConditionConver(condition),
+                Topic = (MaterialTopic)ConversorEnumInt.MateriaTopicConver(topic),
+                Format = format ?? "",
+                Duration = duration ?? "",
+                Discriminator = DiscriminatorPage
+
+            };
+            registro = await materialService.CreateMaterial(newMaterialAudiovisual);
+        }
+
+        await OnRegistroCompletado.InvokeAsync(registro);
+        StateHasChanged();
+    }
+
+    public async Task mensaje()
+    {
+        if (string.IsNullOrWhiteSpace(discriminator))
+        {
+            mensajeError = "El Tipo de material es obligatorio.";
+            return;
+        }
+        if (string.IsNullOrWhiteSpace(title))
+        {
+            mensajeError = "El título es obligatorio.";
+            return;
+        }
+
+        if (string.IsNullOrWhiteSpace(author))
+            {
+                mensajeError = "El autor es obligatorio.";
+                return;
+            }
+
+        if (publicationYear <= 0)
+        {
+            mensajeError = "El año de publicación debe ser válido.";
+            return;
+        }
+
+        if (string.IsNullOrWhiteSpace(condition))
+        {
+            mensajeError = "Debes seleccionar una condición.";
+            return;
+        }
+
+        if (string.IsNullOrWhiteSpace(topic))
+        {
+            mensajeError = "Debes seleccionar un tema.";
+            return;
+        }
+
+        if (DiscriminatorPage == "Libro")
+        {
+            if (pages == null || pages <= 49)
+            {
+                mensajeError = "Debes ingresar un número válido de páginas.";
+                return;
+            }
+        }
+        else
+        {
+            if (string.IsNullOrWhiteSpace(format))
+            {
+                mensajeError = "Debes seleccionar un formato.";
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(duration))
+            {
+                mensajeError = "Debes ingresar la duración.";
+                return;
+            }
+        }
+
+        mensajeError = "";
+    }
+
+    private void CerrarPopup()
+    {
+        mensajeError = "";
+        StateHasChanged();
+    }
+}

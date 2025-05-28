@@ -1,4 +1,4 @@
-﻿.tabla-materiales {
+﻿.tabla-loan {
     width: 100%;
     border-collapse: collapse;
     margin-top: 20px;
@@ -9,7 +9,7 @@
     animation: fadeOutIn 0.6s ease-in-out;
 }
 
-    .tabla-materiales th {
+    .tabla-loan th {
         background-color: #28a745;
         color: white;
         padding: 12px;
@@ -18,13 +18,13 @@
         text-transform: uppercase;
     }
 
-    .tabla-materiales td {
+    .tabla-loan td {
         padding: 12px;
         border-bottom: 1px solid #dddddd;
         font-size: 14px;
     }
 
-    .tabla-materiales tr:hover {
+    .tabla-loan tr:hover {
         background-color: #f1f1f1;
     }
 
@@ -32,8 +32,7 @@
     padding: 5px 10px;
     font-size: 13px;
 }
-
-.informacion-materias {
+.informacion-prestamos {
     max-width: 600px;
     margin: 80px auto;
     padding: 30px;
@@ -45,7 +44,7 @@
 }
 
 
-    .informacion-materias h3 {
+    .informacion-prestamos h3 {
         font-size: 20px;
         color: #40916c;
         margin-bottom: 5px;
@@ -82,8 +81,6 @@
         margin-bottom: 10px;
         color: #28a745;
     }
-
-
 @keyframes fadeOutIn {
     from {
         opacity: 0;

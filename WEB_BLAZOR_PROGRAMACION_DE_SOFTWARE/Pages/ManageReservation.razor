@@ -1,0 +1,79 @@
+﻿@page "/ManageReservation"
+@using WEB_BLAZOR_PROGRAMACION_DE_SOFTWARE.Entities
+@using WEB_BLAZOR_PROGRAMACION_DE_SOFTWARE.Interfaces
+@using WEB_BLAZOR_PROGRAMACION_DE_SOFTWARE.Services
+@inject UserSessionService session
+@inject IReservationService reservation
+@inject ILoanService loan
+
+
+@if (reservations == null)
+{
+    <div class="informacion-baseDeDatos">
+        <h3>!No se pudo acceder a la base de datos!</h3>
+    </div>
+}
+else if (reservations.Count == 0)
+{
+    <div class="informacion-reservas">
+        <h3>!No hay reservas disponibles!</h3>
+    </div>
+}
+else
+{
+    <table class="tabla-Reservation">
+        <thead>
+            <tr>
+                <th>ReservationId</th>
+                <th>Usuario</th>
+                <th>material</th>
+                <th>RequestDate </th>
+                <th>ExpirationDate</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var reserva in reservations)
+            {
+                @if (reserva.Status.ToString().Equals("Pending"))
+                {
+                    <tr>
+                        <td>@reserva.ReservationId</td>
+                        <td>@reserva.UserId</td>
+                        <td>@session.user.FirstName @session.user.LastName</td>
+                        <td>@reserva.MaterialId</td>
+                        <td>@reserva.RequestDate.ToString()</td>
+                        <td>@reserva.ExpirationDate.ToString()</td>
+                        <td>@reserva.Status.ToString()</td>
+                        <td>
+                            <NavLink class="btn btn-success" href="@($"/AceptarReserva/{reserva.ReservationId}/{reserva.UserId}")">
+                                Crear Perestamo
+                            </NavLink>
+
+                        </td>
+                        <td>
+                            <NavLink class="btn btn-success" href="@($"/RechazarReserva/{reserva.ReservationId}/{reserva.UserId}")">
+                                Rechazar Prestamo
+                            </NavLink>
+
+                        </td>
+                    </tr>
+                    
+                }
+                
+                
+                
+            }
+        </tbody>
+    </table>
+}
+
+
+@code {
+    public List<Reservation> reservations;
+    protected override async Task OnInitializedAsync()
+    {
+        reservations = await reservation.ListReservations();
+    }
+    
+}

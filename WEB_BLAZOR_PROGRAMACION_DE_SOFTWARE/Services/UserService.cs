@@ -3,6 +3,7 @@ using System.Net.Http.Json;
 using System.Text.Json;
 using WEB_BLAZOR_PROGRAMACION_DE_SOFTWARE.Entities;
 using WEB_BLAZOR_PROGRAMACION_DE_SOFTWARE.Interfaces;
+using WEB_BLAZOR_PROGRAMACION_DE_SOFTWARE.Pages;
 
 
 namespace WEB_BLAZOR_PROGRAMACION_DE_SOFTWARE.Services
@@ -25,22 +26,37 @@ namespace WEB_BLAZOR_PROGRAMACION_DE_SOFTWARE.Services
 
 
             return result;
-        }
+        }*/
 
         public async Task<User> GetUser(int userId)
         {
-            
-            var user = await _userDAO.GetUser(userId);
-            if (user != null)
+
+            Console.WriteLine("UserService.GetUser() llamado.");
+            try
             {
-                _logger.LogInformation($"Usuario con ID: {userId} encontrado.");
+
+                var response = await _httpClient.GetAsync($"{_baseApiUrl}/Buscar?userId={userId}");
+                Console.WriteLine($"Respuesta de GetUser: Status Code - {response.StatusCode}");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var content = await response.Content.ReadAsStringAsync();
+                    var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+                    var usuario = JsonSerializer.Deserialize<User>(content, options);
+                    return usuario;
+                }
+                else
+                {
+                    Console.WriteLine($"Error al obtener el  usuario: Status Code - {response.StatusCode}");
+                    return null; // O lanza una excepción más específica
+                }
             }
-            else
+            catch (Exception ex)
             {
-                _logger.LogWarning($"No se encontró el usuario con ID: {userId}.");
+                Console.WriteLine($"Error al obtener el usuario: {ex.Message}");
+                return null; // O lanza una excepción más específica
             }
-            return user;
-        }*/
+        }
 
         
         public async Task<Boolean> CreateUser(User user)

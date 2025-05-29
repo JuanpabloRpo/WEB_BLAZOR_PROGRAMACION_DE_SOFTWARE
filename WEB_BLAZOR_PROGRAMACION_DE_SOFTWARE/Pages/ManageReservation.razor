@@ -4,10 +4,18 @@
 @using WEB_BLAZOR_PROGRAMACION_DE_SOFTWARE.Services
 @inject UserSessionService session
 @inject IReservationService reservation
+@inject IMaterialService materialService
+@inject IUserService userService
 @inject ILoanService loan
 
-
-@if (reservations == null)
+@if (isLoading)
+{
+    <div class="spinner-cargando">
+        <div class="spinner"></div>
+        <h3>Cargando reservas...</h3>
+    </div>
+}
+else if (reservations == null)
 {
     <div class="informacion-baseDeDatos">
         <h3>!No se pudo acceder a la base de datos!</h3>
@@ -39,9 +47,8 @@ else
                 {
                     <tr>
                         <td>@reserva.ReservationId</td>
-                        <td>@reserva.UserId</td>
-                        <td>@session.user.FirstName @session.user.LastName</td>
-                        <td>@reserva.MaterialId</td>
+                        <td>@(userName.ContainsKey(reserva.UserId) ? userName[reserva.UserId] : "No se pudo Cargar el Nombre")</td>
+                        <td>@(materialTitles.ContainsKey(reserva.MaterialId) ? materialTitles[reserva.MaterialId] : "No se pudo Cargar el Nombre")</td>
                         <td>@reserva.RequestDate.ToString()</td>
                         <td>@reserva.ExpirationDate.ToString()</td>
                         <td>@reserva.Status.ToString()</td>
@@ -70,10 +77,54 @@ else
 
 
 @code {
+
     public List<Reservation> reservations;
+    private bool isLoading = true;
+
+    private Dictionary<int, string> userName = new();
+    private Dictionary<int, string> materialTitles = new();
+
     protected override async Task OnInitializedAsync()
     {
-        reservations = await reservation.ListReservations();
+        try
+        {
+            reservations = await reservation.ListReservations();
+            await getUser(reservations);
+            await getTitle(reservations);
+        }
+        catch
+        {
+            reservations = null;
+        }
+        finally
+        {
+            isLoading = false;
+        }
+        
+    }
+
+    private async Task getUser(List<Reservation> reservations)
+    {
+        foreach (var reservation in reservations)
+        {
+            var usuario = await userService.GetUser(reservation.UserId);
+            userName[reservation.UserId] = usuario != null && usuario.Id != null
+       ? $"{usuario.FirstName} {(usuario.MiddleName ?? "")} {(usuario.LastName ?? "")}".Trim()
+       : "Desconocido";
+        }
+        StateHasChanged();
+    }
+
+    private async Task getTitle(List<Reservation> reservas)
+    {
+        foreach (var reserva in reservas)
+        {
+            var material = await materialService.GetMaterial(reserva.MaterialId);
+            materialTitles[reserva.MaterialId] = material?.Title ?? "Desconocido";
+            Console.WriteLine($"Material cargado: {material.MaterialId} - {material.Title}");
+
+        }
+        StateHasChanged();
     }
     
 }

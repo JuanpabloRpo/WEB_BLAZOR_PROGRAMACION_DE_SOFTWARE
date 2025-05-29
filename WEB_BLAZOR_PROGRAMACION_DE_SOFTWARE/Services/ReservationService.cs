@@ -2,6 +2,7 @@
 using System.Text.Json;
 using WEB_BLAZOR_PROGRAMACION_DE_SOFTWARE.Entities;
 using WEB_BLAZOR_PROGRAMACION_DE_SOFTWARE.Interfaces;
+using WEB_BLAZOR_PROGRAMACION_DE_SOFTWARE.Pages;
 
 
 namespace WEB_BLAZOR_PROGRAMACION_DE_SOFTWARE.Services
@@ -47,22 +48,36 @@ namespace WEB_BLAZOR_PROGRAMACION_DE_SOFTWARE.Services
                 return null; // O lanza una excepción más específica
             }
         }
-        /*
+        
         public async Task<Reservation> GetReservation(int reservationId)
         {
-            var reservation = await _reservationDAO.GetReservation(reservationId);
-            if (reservation != null)
+            Console.WriteLine("MaterialService.GetMaterial() llamado.");
+            try
             {
-                _logger.LogInformation($"Reserva con ID: {reservationId} encontrado.");
-                return reservation;
+
+                var response = await _httpClient.GetAsync($"{_baseApiUrl}/Buscar?reservationId={reservationId}");
+                Console.WriteLine($"Respuesta de GetMaterial: Status Code - {response.StatusCode}");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var content = await response.Content.ReadAsStringAsync();
+                    var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+                    var reserva = JsonSerializer.Deserialize<Reservation>(content, options);
+                    return reserva;
+                }
+                else
+                {
+                    Console.WriteLine($"Error al obtener el  material: Status Code - {response.StatusCode}");
+                    return null; // O lanza una excepción más específica
+                }
             }
-            else
+            catch (Exception ex)
             {
-                _logger.LogWarning($"No se encontró la reserva con ID: {reservationId}.");
-                return null;
+                Console.WriteLine($"Error al obtener el material: {ex.Message}");
+                return null; // O lanza una excepción más específica
             }
-            
-        }*/
+
+        }
 
         public async Task<List<Reservation>> GetReservationsUser(int UserId)
         {

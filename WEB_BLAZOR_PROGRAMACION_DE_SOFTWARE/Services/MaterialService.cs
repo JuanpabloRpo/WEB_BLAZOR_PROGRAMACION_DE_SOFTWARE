@@ -87,7 +87,7 @@ namespace WEB_BLAZOR_PROGRAMACION_DE_SOFTWARE.Services
             try
             {
 
-                var response = await _httpClient.GetAsync($"{_baseApiUrl}/Listar");
+                var response = await _httpClient.GetAsync($"{_baseApiUrl}/Buscar?materialId={materialId}");
                 Console.WriteLine($"Respuesta de GetMaterial: Status Code - {response.StatusCode}");
 
                 if (response.IsSuccessStatusCode)

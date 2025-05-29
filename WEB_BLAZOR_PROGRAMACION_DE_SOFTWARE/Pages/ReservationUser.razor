@@ -3,12 +3,19 @@
 @using WEB_BLAZOR_PROGRAMACION_DE_SOFTWARE.Services
 @using WEB_BLAZOR_PROGRAMACION_DE_SOFTWARE.Interfaces
 @inject IReservationService reservation
+@inject IMaterialService materialService
 @inject UserSessionService session
 
 <div class="contenedor-tabla">
-    
     <h2>Las reservas que has hecho son: </h2>
-    @if (reservas == null)
+    @if (isLoading)
+    {
+        <div class="spinner-cargando">
+            <div class="spinner"></div>
+            <h3>Cargando reservas...</h3>
+        </div>
+    }
+    else if (reservas == null)
     {
         <div class="informacion-baseDeDatos">
             <h3>!No se pudo acceder a la base de datos!</h3>
@@ -26,7 +33,6 @@
             <thead>
                 <tr>
                     <th>ReservationId</th>
-                    <th>Usuario</th>
                     <th>material</th>
                     <th>RequestDate </th>
                     <th>ExpirationDate</th>
@@ -36,10 +42,10 @@
             <tbody>
                 @foreach (var reserva in reservas)
                 {
+                    
                     <tr>
                         <td>@reserva.ReservationId</td>
-                        <td>@session.user.FirstName @session.user.LastName</td>
-                        <td>@reserva.MaterialId</td>
+                        <td>@(materialTitles.ContainsKey(reserva.MaterialId) ? materialTitles[reserva.MaterialId] : "No se pudo Cargar el Nombre")</td>
                         <td>@reserva.RequestDate.ToString()</td>
                         <td>@reserva.ExpirationDate.ToString()</td>
                         <td>@reserva.Status.ToString()</td>
@@ -60,10 +66,38 @@
 </div>
 @code {
     private List<Reservation> reservas;
+    private bool isLoading = true;
+    private Dictionary<int, string> materialTitles = new();
+
 
     protected override async Task OnInitializedAsync()
     {
-        reservas = await reservation.GetReservationsUser(session.user.Id);
+        try
+        {
+            reservas = await reservation.GetReservationsUser(session.user.Id);
+            await getTitle(reservas);
+        }
+        catch
+        {
+            reservas = null;
+        }
+        finally
+        {
+            isLoading = false;
+        }
+
+    }
+
+    private async Task getTitle(List<Reservation> reservas)
+    {
+        foreach (var reserva in reservas)
+        {
+            var material = await materialService.GetMaterial(reserva.MaterialId);
+            materialTitles[reserva.MaterialId] = material?.Title ?? "Desconocido";
+            Console.WriteLine($"Material cargado: {material.MaterialId} - {material.Title}");
+
+        }
+        StateHasChanged();
     }
 
 }

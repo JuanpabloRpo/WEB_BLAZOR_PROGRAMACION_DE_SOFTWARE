@@ -3,13 +3,22 @@
 @using WEB_BLAZOR_PROGRAMACION_DE_SOFTWARE.Services
 @using WEB_BLAZOR_PROGRAMACION_DE_SOFTWARE.Interfaces
 @inject ILoanService loan
+@inject IReservationService reservation
+@inject IMaterialService materialService
 @inject UserSessionService session
 
 
 <div class="contenedor-tabla">
 
     <h2>Los prestamos que has hecho son: </h2>
-    @if (loans == null)
+    @if (isLoading)
+    {
+        <div class="spinner-cargando">
+            <div class="spinner"></div>
+            <h3>Cargando prestamos...</h3>
+        </div>
+    }
+    else if (loans == null)
     {
         <div class="informacion-baseDeDatos">
             <h3>!No se pudo acceder a la base de datos!</h3>
@@ -27,8 +36,8 @@
             <thead>
                 <tr>
                     <th>LoanId</th>
-                    <th>Usuario</th>
                     <th>ReservationId</th>
+                    <th>Material</th>
                     <th>RequestDate </th>
                     <th>ExpirationDate</th>
                     <th>ReturnDate</th>
@@ -40,8 +49,8 @@
                 {
                     <tr>
                         <td>@loan.LoanId</td>
-                        <td>@session.user.FirstName @session.user.LastName</td>
                         <td>@loan.ReservationId</td>
+                        <td>@(reservationId.ContainsKey(loan.ReservationId) ? materialTitles.ContainsKey(reservationId[loan.ReservationId]) ? materialTitles[reservationId[loan.ReservationId]] : "No se pudo Cargar el Nombre" : "No se pudo Cargar el Nombre")</td>
                         <td>@loan.StartDate.ToString()</td>
                         <td>@loan.DueDate.ToString()</td>
                         @if (loan.ReturnDate.ToString().Equals("1/1/0001 0:00:00"))
@@ -72,9 +81,50 @@
 
 @code {
     private List<Loan> loans;
+    private bool isLoading = true;
+
+    private Dictionary<int, int> reservationId = new();
+    private Dictionary<int, string> materialTitles = new();
 
     protected override async Task OnInitializedAsync()
     {
-        loans = await loan.GetLoansUser(session.user.Id);
+        try
+        {
+            loans = await loan.GetLoansUser(session.user.Id);
+            await getReserva(loans);
+        }
+        catch
+        {
+            loans = null;
+        }
+        finally
+        {
+            isLoading = false;
+        }
+
+    }
+
+    private async Task getReserva(List<Loan> loans)
+    {
+        foreach (var loan in loans)
+        {
+            var reserva = await reservation.GetReservation(loan.ReservationId);
+            reservationId[loan.ReservationId] = reserva.MaterialId;
+        }
+        StateHasChanged();
+        await getTitle(reservationId);
+    }
+    private async Task getTitle(Dictionary<int, int> reservationsId)
+    {
+        var keys = reservationsId.Keys.ToList();
+
+        for (int i = 0; i < keys.Count; i++)
+        {
+            var key = keys[i];
+            var value = reservationsId[key];
+            var material = await materialService.GetMaterial(value);
+            materialTitles[value] = material?.Title ?? "Desconocido";
+        }
+        StateHasChanged();
     }
 }

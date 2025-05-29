@@ -12,8 +12,14 @@
     <h2>Material</h2>
     <button class="btn btn-primary m-2" @onclick="ViewAllMaterials">Materiales</button>
     <button class="btn btn-primary m-2" @onclick="ViewAvailableMaterials">Materiales Disponibles</button>
-
-    @if (tablaMostrada.Equals("All"))
+    @if (isLoading)
+    {
+        <div class="spinner-cargando">
+            <div class="spinner"></div>
+            <h3>Cargando materiales...</h3>
+        </div>
+    }
+    else if (tablaMostrada.Equals("All"))
     {
         @if (materias == null)
         {
@@ -73,11 +79,15 @@
     {
         @if (materiasAvailable == null)
         {
-            <p><em>No se pudo acceder a la base de datos</em></p>
+            <div class="informacion-baseDeDatos">
+                <h3>!No se pudo acceder a la base de datos!</h3>
+            </div>
         }
         else if (materiasAvailable.Count == 0)
         {
-            <p><em>No hay materias disponibles.</em></p>
+            <div class="informacion-materias">
+                <h3>!No hay materias disponibles!</h3>
+            </div>
         }
         else
         {
@@ -121,13 +131,28 @@
 @code {
     private List<Material> materias;
     private List<Material> materiasAvailable;
+    private bool isLoading = true;
 
     private string tablaMostrada = "All";
 
     protected override async Task OnInitializedAsync()
     {
-        materias = await MaterialService.ListMaterials();
-        materiasAvailable = await MaterialService.ListAvailableMaterials();
+        try
+        {
+            materias = await MaterialService.ListMaterials();
+            materiasAvailable = await MaterialService.ListAvailableMaterials();
+            
+        }
+        catch
+        {
+            materias = null;
+            materiasAvailable = null;
+        }
+        finally
+        {
+            isLoading = false;
+        }
+
     }
 
     protected void ViewAvailableMaterials()

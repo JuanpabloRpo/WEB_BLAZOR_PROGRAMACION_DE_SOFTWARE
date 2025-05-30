@@ -36,15 +36,6 @@
     <h2>Año de publicación</h2>
     <input type="number" min="0" max="2025" @bind-value="publicationYear" />
 
-    <h2>Condición</h2>
-    <select class="form-select" @bind="condition">
-        <option disabled selected>Seleccione un tipo</option>
-        @foreach (var item in Enum.GetValues<MaterialCondition>())
-        {
-            <option value="@item">@Conversor.GetDisplayName(item)</option>
-        }
-    </select>
-
     <h2>Tema</h2>
     <select class="form-select" @bind="topic">
         <option disabled selected value="">Seleccione un tipo</option>
@@ -56,6 +47,15 @@
 
     @if (discriminator.Equals("Libro"))
     {
+        <h2>Condición</h2>
+        <select class="form-select" @bind="condition">
+            <option disabled selected>Seleccione un tipo</option>
+            @foreach (var item in Enum.GetValues<MaterialCondition>())
+            {
+                <option value="@item">@Conversor.GetDisplayName(item)</option>
+            }
+        </select>
+
         <h2>Paginas</h2>
         <input type="number" min="49 " max="3.031" @bind-value="pages" />
     }
